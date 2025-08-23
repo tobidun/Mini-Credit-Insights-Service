@@ -1,0 +1,51 @@
+version: "3.8"
+
+services:
+  backend:
+    build: .
+    container_name: credit-insights-backend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - DB_TYPE=sqlite
+      - DB_DATABASE=./data/credit_insights.db
+      - JWT_SECRET=your-super-secret-jwt-key-change-in-production
+      - BUREAU_API_URL=http://bureau-mock:3001/v1/credit/check
+      - BUREAU_API_KEY=mock-api-key-123
+      - BUREAU_MAX_RETRIES=3
+      - BUREAU_TIMEOUT=10000
+    depends_on:
+      - bureau-mock
+    volumes:
+      - ./uploads:/app/uploads
+      - ./data:/app/data
+    networks:
+      - credit-insights-network
+
+  bureau-mock:
+    build: ./bureau-mock
+    container_name: credit-insights-bureau-mock
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - API_KEY=mock-api-key-123
+    networks:
+      - credit-insights-network
+
+  frontend:
+    build: ./frontend
+    container_name: credit-insights-frontend
+    ports:
+      - "3002:80"
+    depends_on:
+      - backend
+    environment:
+      - REACT_APP_API_URL=http://localhost:3000/api/v1
+    networks:
+      - credit-insights-network
+
+networks:
+  credit-insights-network:
+    driver: bridge
