@@ -120,6 +120,12 @@ class ApiService {
     const response = await this.api.get("/health");
     return response.data;
   }
+
+  // Get metrics
+  async getMetrics(): Promise<any> {
+    const response = await this.api.get("/health/metrics");
+    return response.data;
+  }
 }
 
 export const apiService = new ApiService();

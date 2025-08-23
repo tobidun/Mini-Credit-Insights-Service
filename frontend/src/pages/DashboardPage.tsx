@@ -18,6 +18,7 @@ import {
 import { useStatements } from "../hooks/useStatements";
 import { useInsights } from "../hooks/useInsights";
 import { useBureauReports } from "../hooks/useBureau";
+import { HealthStatus } from "../components/HealthStatus";
 
 export const DashboardPage: React.FC = () => {
   const { data: statements, isLoading: statementsLoading } = useStatements();
@@ -76,6 +77,9 @@ export const DashboardPage: React.FC = () => {
         <div className="absolute top-0 right-0 -mt-4 -mr-4 h-32 w-32 rounded-full bg-white/10"></div>
         <div className="absolute bottom-0 left-0 -mb-8 -ml-8 h-24 w-24 rounded-full bg-white/5"></div>
       </div>
+
+      {/* System Health Status */}
+      <HealthStatus />
 
       {/* Key Metrics Grid */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">

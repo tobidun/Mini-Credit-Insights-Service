@@ -1,304 +1,360 @@
-# Credit Insights Service
+# Mini Credit Insights Service - Backend API Test
 
-A comprehensive financial analysis platform that ingests bank statements, computes spending insights, and integrates with credit bureau APIs. Built with NestJS backend and React frontend.
+A backend API project demonstrating NestJS skills, external API integration, authentication, and data processing.
 
-## 🚀 Features
+## 🎯 What I Built
 
-### Backend Services
+This is a **backend technical assessment** that shows off:
 
-- **Authentication**: JWT-based user registration and login with RBAC
-- **CSV Processing**: Bank statement ingestion with transaction parsing
-- **Financial Insights**: Automated analysis of spending patterns and risk assessment
-- **Credit Bureau Integration**: Mock API with retry logic and error handling
-- **RESTful APIs**: Comprehensive API endpoints with Swagger documentation
-
-### Frontend Interface
-
-- **Modern UI**: React-based interface with Tailwind CSS
-- **Real-time Updates**: React Query for efficient data management
-- **Interactive Charts**: Visual representation of financial data
-- **Responsive Design**: Mobile-first approach with responsive layouts
-- **Drag & Drop**: Easy CSV file upload interface
+- **Solid NestJS architecture** with clean separation of concerns
+- **External API integration** with a custom mock credit bureau service
+- **Comprehensive testing** - Unit and integration tests
+- **Production-ready patterns** - Authentication, validation, error handling
+- **Microservices setup** with Docker containerization
+- **Database design** with TypeORM and MySQL
 
 ## 🏗️ Architecture
 
+Clean architecture approach with clear separation of concerns:
+
 ```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Frontend      │    │   Backend       │    │   Database      │
-│   (React)       │◄──►│   (NestJS)      │◄──►│   (MySQL)       │
-│   Port: 3002    │    │   Port: 3000    │    │   Port: 3306    │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-                                │
-                                ▼
-                       ┌─────────────────┐
-                       │  Mock Bureau    │
-                       │     API         │
-                       │   Port: 3001    │
-                       └─────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│                        Backend Layer                           │
+├─────────────────────────────────────────────────────────────────┤
+│  Controllers (REST API)  │  Services (Business Logic)         │
+│  • Input Validation      │  • Data Processing                 │
+│  • Request Handling      │  • External API Integration        │
+│  • Response Formatting   │  • Business Rules                  │
+├─────────────────────────────────────────────────────────────────┤
+│  DTOs & Validation       │  Entities & Repositories           │
+│  • Request/Response      │  • Data Models                     │
+│  • Input Sanitization    │  • Database Operations             │
+│  • Type Safety           │  • Query Optimization              │
+├─────────────────────────────────────────────────────────────────┤
+│                    External Services                            │
+│  • Mock Credit Bureau API (Custom Implementation)             │
+│  • Database (MySQL)                                    │
+│  • Authentication (JWT)                                       │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-## 🛠️ Tech Stack
+### Core Modules
 
-### Backend
+- **`auth/`** - JWT authentication, role-based access control
+- **`users/`** - User management and profiles
+- **`statements/`** - CSV processing and transaction parsing
+- **`insights/`** - Financial analysis and pattern recognition
+- **`bureau/`** - External API integration
+- **`audit/`** - Security logging and compliance
+- **`health/`** - System monitoring and metrics
 
-- **Node.js** + **TypeScript**
-- **NestJS** framework
-- **MySQL** database with **TypeORM**
-- **JWT** authentication
-- **Swagger** API documentation
-- **Jest** testing framework
+## 🚀 Key Features
 
-### Frontend
+### 🔐 **Authentication System**
 
-- **React 18** + **TypeScript**
-- **React Query** (TanStack Query)
-- **Tailwind CSS** for styling
-- **Chart.js** for data visualization
-- **React Hook Form** for forms
-- **React Router** for navigation
+- JWT-based authentication with secure token management
+- Role-based access control (RBAC)
+- Password hashing using bcrypt
+- Token refresh and expiration handling
+- Audit logging for security events
 
-## 📋 Prerequisites
+### 📊 **Data Processing**
 
-- **Docker** and **Docker Compose**
-- **Node.js** 18+ (for local development)
-- **MySQL** 8.0+ (if running locally)
+- CSV statement parsing with error handling
+- Transaction categorization and data validation
+- Input validation using class-validator decorators
+- Batch processing for large files
+- Data integrity checks with rollback
 
-## 🚀 Quick Start
+### 🧠 **Financial Analysis Engine**
 
-### Option 1: Docker Compose (Recommended)
+- Spending pattern analysis with trend identification
+- Risk assessment based on financial behavior
+- Anomaly detection for unusual transactions
+- Budget recommendations using historical data
+- Performance caching for analysis
 
-1. **Clone the repository**:
+### 🏦 **External API Integration**
+
+- Custom mock credit bureau service built from scratch
+- Retry logic with exponential backoff
+
+## 🛠️ Technology Stack
+
+### **Backend Foundation**
+
+- Node.js 18+ with TypeScript
+- NestJS framework with decorator-based architecture
+- Dependency injection for loose coupling and testability
+
+### **Database & ORM**
+
+- TypeORM for database operations and migrations
+- MySQL database with connection pooling
+- Entity relationships with foreign key constraints
+- Query optimization with strategic indexing
+
+### **API & Documentation**
+
+- RESTful API design following best practices
+- Swagger/OpenAPI documentation with interactive testing
+- Request/Response DTOs with comprehensive validation
+- Consistent error handling
+
+### **Testing & Quality**
+
+- Jest testing framework with coverage reporting
+- Unit tests for business logic
+- Integration tests for API endpoints
+- Integration tests for complete workflows
+- Test database isolation
+
+### **Security & Performance**
+
+- Input validation and sanitization throughout
+- CORS configuration for controlled access
+- Rate limiting for API protection
+- Connection pooling for database efficiency
+- Memory management and health monitoring
+
+## 🏗️ Mock Credit Bureau API
+
+### **Custom Implementation**
+
+Built a complete mock service demonstrating real-world API integration:
+
+```javascript
+const mockBureauFeatures = {
+  authentication: "API key-based authentication",
+  rateLimiting: "Request throttling and limits",
+  retryLogic: "Exponential backoff implementation",
+  errorSimulation: "Configurable failure scenarios",
+  responseVariation: "Realistic credit score variations",
+  logging: "Comprehensive request/response logging",
+};
+```
+
+### **API Endpoints**
+
+- `POST /v1/credit/check` - Simulate credit bureau check
+- `GET /v1/health` - Service health monitoring
+- `GET /v1/metrics` - Performance metrics
+
+### **Integration Patterns**
+
+- Retry mechanism with configurable attempts
+- Request/response logging for debugging
+
+## 📋 Setup
+
+### **Prerequisites**
+
+- Node.js 18+ with npm or yarn
+- Docker and Docker Compose
+- Git for version control
+
+### **Quick Start**
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/tobidun/Mini-Credit-Insights-Service.git
 cd Mini-Credit-Insights-Service
-```
-
-2. **Start all services**:
-
-```bash
 docker-compose up -d
 ```
 
-3. **Access the services**:
-
-- **Frontend**: http://localhost:3002
-- **Backend API**: http://localhost:3000/api/v1
-- **API Docs**: http://localhost:3000/api/v1/docs
-- **Mock Bureau**: http://localhost:3001
-
-### Option 2: Local Development
-
-1. **Start the database**:
-
-```bash
-docker-compose up mysql -d
-```
-
-2. **Install backend dependencies**:
+### **Local Development**
 
 ```bash
 npm install
-```
-
-3. **Start the backend**:
-
-```bash
 npm run start:dev
-```
-
-4. **Install frontend dependencies**:
-
-```bash
-cd frontend
-npm install
-```
-
-5. **Start the frontend**:
-
-```bash
-npm start
-```
-
-## 📚 API Documentation
-
-### Authentication Endpoints
-
-- `POST /api/v1/auth/register` - User registration
-- `POST /api/v1/auth/login` - User login
-
-### Statement Management
-
-- `POST /api/v1/statements/upload` - Upload CSV statement
-- `GET /api/v1/statements` - Get user statements
-- `GET /api/v1/statements/:id` - Get specific statement
-
-### Financial Insights
-
-- `POST /api/v1/insights/run` - Compute insights
-- `GET /api/v1/insights` - Get user insights
-- `GET /api/v1/insights/:id` - Get specific insight
-
-### Credit Bureau
-
-- `POST /api/v1/bureau/check` - Check credit
-- `GET /api/v1/bureau` - Get bureau reports
-- `GET /api/v1/bureau/:id` - Get specific report
-
-### Health & Monitoring
-
-- `GET /api/v1/health` - Health check
-- `GET /api/v1/metrics` - Application metrics
-
-## 🧪 Testing
-
-### Backend Tests
-
-```bash
-# Run all tests
-npm test
-
-# Run tests with coverage
-npm run test:cov
-
-# Run e2e tests
-npm run test:e2e
-```
-
-### Frontend Tests
-
-```bash
-cd frontend
 npm test
 ```
 
-## 📁 Project Structure
+## 📚 API Reference
 
+### **Authentication**
+
+```http
+POST /api/v1/auth/register
+POST /api/v1/auth/login
 ```
-├── src/                    # Backend source code
-│   ├── auth/              # Authentication module
-│   ├── users/             # User management
-│   ├── statements/        # Statement processing
-│   ├── insights/          # Financial analysis
-│   ├── bureau/            # Credit bureau integration
-│   └── audit/             # Audit logging
-├── frontend/              # React frontend application
-│   ├── src/
-│   │   ├── components/    # Reusable UI components
-│   │   ├── pages/         # Page components
-│   │   ├── hooks/         # Custom React Query hooks
-│   │   ├── services/      # API service layer
-│   │   └── types/         # TypeScript interfaces
-│   └── public/            # Static assets
-├── bureau-mock/           # Mock credit bureau API
-├── docker-compose.yml     # Service orchestration
-└── README.md             # This file
+
+### **Statements**
+
+```http
+POST /api/v1/statements/upload
+GET /api/v1/statements
+GET /api/v1/statements/:id
+```
+
+### **Insights**
+
+```http
+POST /api/v1/insights/run
+GET /api/v1/insights
+GET /api/v1/insights/:id
+```
+
+### **Credit Bureau**
+
+```http
+POST /api/v1/bureau/check
+GET /api/v1/bureau/reports
+GET /api/v1/bureau/reports/:id
+```
+
+### **Health**
+
+```http
+GET /api/v1/health
+GET /api/v1/health/metrics
 ```
 
 ## 🔧 Configuration
 
-### Environment Variables
-
-#### Backend
+### **Environment Variables**
 
 ```env
 NODE_ENV=development
+PORT=3000
+
+# Database
 DB_HOST=localhost
 DB_PORT=3306
 DB_USERNAME=user
 DB_PASSWORD=password
 DB_DATABASE=credit_insights
-JWT_SECRET=your-secret-key
-BUREAU_API_URL=http://localhost:3001/v1/credit/check
+
+# Security
+JWT_SECRET=your-super-secret-jwt-key-change-in-production
+JWT_EXPIRES_IN=24h
+
+# External API (Mock Bureau)
+BUREAU_API_URL=http://bureau-mock:3001/v1/credit/check
 BUREAU_API_KEY=mock-api-key-123
 BUREAU_MAX_RETRIES=3
 BUREAU_TIMEOUT=10000
-```
 
-#### Frontend
+# Logging
+LOG_LEVEL=debug
 
-```env
-REACT_APP_API_URL=http://localhost:3000/api/v1
+# Rate Limiting
+THROTTLE_TTL=60
+THROTTLE_LIMIT=100
 ```
 
 ## 📊 Data Models
 
-### Core Entities
+### **Entity Relationships**
 
-- **Users**: Authentication and role management
-- **Statements**: Bank statement metadata
-- **Transactions**: Individual financial transactions
-- **Insights**: Computed financial analysis
-- **Bureau Reports**: Credit bureau data
-- **Audit Logs**: System activity tracking
+```typescript
+User (1) ←→ (N) Statement
+Statement (1) ←→ (N) Transaction
+User (1) ←→ (N) Insight
+User (1) ←→ (N) BureauReport
+User (1) ←→ (N) AuditLog
+```
+
+### **Key Entities**
+
+- **User**: Authentication, roles, and profile information
+- **Statement**: Bank statement metadata and file storage
+- **Transaction**: Individual financial transactions with categorization
+- **Insight**: Computed financial analysis and recommendations
+- **BureauReport**: Credit bureau data and scores
+- **AuditLog**: System activity and security tracking
 
 ## 🔒 Security Features
 
-- **JWT Authentication** with secure token handling
-- **Password Hashing** using bcrypt
-- **Input Validation** with class-validator
-- **Rate Limiting** for API endpoints
-- **CORS Configuration** for frontend integration
-- **Security Headers** in nginx configuration
+- JWT Authentication with secure token handling
+- Password hashing using bcrypt with salt rounds
+- Input validation and sanitization throughout
+- CORS configuration for controlled access
+- Rate limiting for API protection
+- Audit logging for complete activity tracking
+- Secure error messages without information leakage
 
 ## 📈 Performance Features
 
-- **Database Indexing** for optimal query performance
-- **Query Caching** with React Query
-- **File Upload Optimization** with streaming
-- **Background Processing** for CSV parsing
-- **Connection Pooling** for database connections
+- Database indexing for optimal query performance
+- Connection pooling for efficient database connections
+- Query optimization with TypeORM query builder
+
+- Built-in health checks and performance metrics
 
 ## 🚀 Deployment
 
-### Production Build
+### **Production Considerations**
+
+1. Environment Security: Strong, unique secrets
+2. Database: Production-grade MySQL with backups
+3. SSL/TLS: Proper certificates for HTTPS
+4. Monitoring: Logging, alerting, and performance tracking
+5. Scaling: Load balancing strategies
+6. Security: Firewall, access control
+
+### **Docker Deployment**
 
 ```bash
-# Backend
-npm run build
-docker build -t credit-insights-backend .
-
-# Frontend
-cd frontend
-npm run build
-docker build -t credit-insights-frontend .
+docker-compose build
+docker-compose up -d
+docker-compose logs -f backend
 ```
 
-### Environment Considerations
+## 🧪 Testing
 
-- Use strong JWT secrets
-- Configure production database credentials
-- Set up proper SSL/TLS certificates
-- Configure monitoring and logging
-- Set up backup strategies
+### **Testing Strategy**
 
-## 🤝 Contributing
+- Unit tests for business logic and services
+- Integration tests for API endpoints and database
+- Test coverage reporting with npm run test:cov
+- CI pipeline with automated testing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Ensure all tests pass
-6. Submit a pull request
+### **Test Commands**
 
-## 📝 License
+```bash
+npm test                    # Run all tests
+npm run test:cov           # Tests with coverage
+npm test -- --testPathPattern=auth  # Test specific module
+npm run test:watch         # Watch mode
+```
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+## 🔍 Interview Test Focus Areas
 
-## 🆘 Support
+This project demonstrates proficiency in:
 
-For support and questions:
+### **Advanced NestJS Development**
 
-- Check the API documentation at `/api/v1/docs`
-- Review the test files for usage examples
-- Open an issue on the repository
+- Module architecture and dependency injection
+- Custom decorators and interceptors
+- Middleware and guard implementation
+- Exception filters and error handling
 
-## 🔄 Changelog
+### **External API Integration**
 
-### v1.0.0
+- HTTP client implementation with retry logic
+- Comprehensive error handling and logging
 
-- Initial release with full backend and frontend
-- Complete API implementation
-- Modern React interface
+### **Database Design & ORM**
+
+- Entity relationship modeling
+- Query optimization and indexing
+- Migration management
+- Data validation and integrity
+
+### **Testing & Quality Assurance**
+
+- Unit and integration testing
+- Mock service implementation
+- Test data management
+- Coverage reporting and analysis
+
+### **Production Readiness**
+
+- Environment configuration management
+- Security implementation
+- Performance monitoring
 - Docker containerization
-- Comprehensive testing suite
+
+**Backend-focused project demonstrating NestJS skills, external API integration, and production-ready patterns.**
+
+GitHub: [Mini-Credit-Insights-Service](https://github.com/tobidun/Mini-Credit-Insights-Service)
