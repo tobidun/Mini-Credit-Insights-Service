@@ -12,18 +12,20 @@ app.use(express.json());
 const API_KEY =
   process.env.API_KEY || process.env.BUREAU_API_KEY || "test-api-key";
 
-// Mock data generator
+// Mock data generator for Nigerian credit system
 function generateMockBureauData() {
   const riskBands = ["Excellent", "Good", "Fair", "Poor", "Very Poor"];
   const riskBand = riskBands[Math.floor(Math.random() * riskBands.length)];
 
   return {
-    score: Math.floor(Math.random() * 300) + 300, // 300-600
+    score: Math.floor(Math.random() * 200) + 300, // 300-500 (Nigerian range)
     risk_band: riskBand,
-    enquiries_6m: Math.floor(Math.random() * 10),
-    defaults: Math.floor(Math.random() * 3),
-    open_loans: Math.floor(Math.random() * 5),
-    trade_lines: Math.floor(Math.random() * 15) + 5,
+    enquiries_6m: Math.floor(Math.random() * 8),
+    defaults: Math.floor(Math.random() * 2),
+    open_loans: Math.floor(Math.random() * 4),
+    trade_lines: Math.floor(Math.random() * 12) + 3,
+    credit_limit: Math.floor(Math.random() * 5000000) + 100000, // ₦100k - ₦5M
+    utilization_rate: Math.floor(Math.random() * 80) + 10, // 10% - 90%
   };
 }
 

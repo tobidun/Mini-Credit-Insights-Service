@@ -11,6 +11,7 @@ import {
   ArrowLeftOnRectangleIcon,
   BellIcon,
   MagnifyingGlassIcon,
+  ShieldCheckIcon,
 } from "@heroicons/react/24/outline";
 import { useCurrentUser, useLogout } from "../hooks/useAuth";
 
@@ -18,14 +19,7 @@ interface LayoutProps {
   children: React.ReactNode;
 }
 
-const navigation = [
-  { name: "Dashboard", href: "/dashboard", icon: HomeIcon },
-  { name: "Statements", href: "/statements", icon: DocumentTextIcon },
-  { name: "Insights", href: "/insights", icon: ChartBarIcon },
-  { name: "Credit Bureau", href: "/bureau", icon: CreditCardIcon },
-];
-
-export const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
   const { data: user, isLoading: userLoading } = useCurrentUser();
@@ -35,6 +29,18 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     const current = navigation.find((item) => item.href === location.pathname);
     return current?.name || "Dashboard";
   };
+
+  // Dynamic navigation based on user role
+  const navigation = [
+    { name: "Dashboard", href: "/dashboard", icon: HomeIcon },
+    { name: "Statements", href: "/statements", icon: DocumentTextIcon },
+    { name: "Insights", href: "/insights", icon: ChartBarIcon },
+    { name: "Credit Bureau", href: "/bureau", icon: CreditCardIcon },
+    // Add admin navigation if user is admin
+    ...(user?.role === "admin"
+      ? [{ name: "Admin", href: "/admin", icon: ShieldCheckIcon }]
+      : []),
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -302,3 +308,5 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     </div>
   );
 };
+
+export default Layout;

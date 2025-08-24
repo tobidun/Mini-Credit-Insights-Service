@@ -19,6 +19,7 @@ import { useStatements } from "../hooks/useStatements";
 import { useInsights } from "../hooks/useInsights";
 import { useBureauReports } from "../hooks/useBureau";
 import { HealthStatus } from "../components/HealthStatus";
+import CreditCheck from "../components/CreditCheck";
 
 export const DashboardPage: React.FC = () => {
   const { data: statements, isLoading: statementsLoading } = useStatements();
@@ -86,7 +87,9 @@ export const DashboardPage: React.FC = () => {
         <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between">
             <div className="space-y-2">
-              <p className="text-sm font-medium text-gray-600 uppercase tracking-wide">Total Statements</p>
+              <p className="text-sm font-medium text-gray-600 uppercase tracking-wide">
+                Total Statements
+              </p>
               <p className="text-3xl font-bold text-gray-900">
                 {statementsLoading ? (
                   <div className="h-8 w-16 bg-gray-200 rounded animate-pulse"></div>
@@ -108,7 +111,9 @@ export const DashboardPage: React.FC = () => {
         <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between">
             <div className="space-y-2">
-              <p className="text-sm font-medium text-gray-600 uppercase tracking-wide">Insights Generated</p>
+              <p className="text-sm font-medium text-gray-600 uppercase tracking-wide">
+                Insights Generated
+              </p>
               <p className="text-3xl font-bold text-gray-900">
                 {insightsLoading ? (
                   <div className="h-8 w-16 bg-gray-200 rounded animate-pulse"></div>
@@ -130,7 +135,9 @@ export const DashboardPage: React.FC = () => {
         <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between">
             <div className="space-y-2">
-              <p className="text-sm font-medium text-gray-600 uppercase tracking-wide">Credit Score</p>
+              <p className="text-sm font-medium text-gray-600 uppercase tracking-wide">
+                Credit Score
+              </p>
               <p className="text-3xl font-bold text-gray-900">
                 {bureauLoading ? (
                   <div className="h-8 w-16 bg-gray-200 rounded animate-pulse"></div>
@@ -152,7 +159,9 @@ export const DashboardPage: React.FC = () => {
         <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between">
             <div className="space-y-2">
-              <p className="text-sm font-medium text-gray-600 uppercase tracking-wide">Monthly Income</p>
+              <p className="text-sm font-medium text-gray-600 uppercase tracking-wide">
+                Monthly Income
+              </p>
               <p className="text-3xl font-bold text-gray-900">
                 {insightsLoading ? (
                   <div className="h-8 w-16 bg-gray-200 rounded animate-pulse"></div>
@@ -182,10 +191,12 @@ export const DashboardPage: React.FC = () => {
               <h3 className="text-2xl font-bold text-gray-900 mb-2">
                 Financial Overview
               </h3>
-              <p className="text-gray-600 text-lg">Based on your latest insights</p>
+              <p className="text-gray-600 text-lg">
+                Based on your latest insights
+              </p>
             </div>
-            <Link 
-              to="/insights" 
+            <Link
+              to="/insights"
               className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-colors"
             >
               <EyeIcon className="h-5 w-5 mr-2" />
@@ -248,10 +259,12 @@ export const DashboardPage: React.FC = () => {
               <h3 className="text-2xl font-bold text-gray-900 mb-2">
                 Recent Statements
               </h3>
-              <p className="text-gray-600 text-lg">Your latest uploaded documents</p>
+              <p className="text-gray-600 text-lg">
+                Your latest uploaded documents
+              </p>
             </div>
-            <Link 
-              to="/statements" 
+            <Link
+              to="/statements"
               className="inline-flex items-center px-4 py-2 text-blue-600 font-medium rounded-lg hover:bg-blue-50 transition-colors"
             >
               View All
@@ -320,8 +333,12 @@ export const DashboardPage: React.FC = () => {
         {/* Quick Actions */}
         <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
           <div className="mb-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">Quick Actions</h3>
-            <p className="text-gray-600 text-lg">Get started with these common tasks</p>
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">
+              Quick Actions
+            </h3>
+            <p className="text-gray-600 text-lg">
+              Get started with these common tasks
+            </p>
           </div>
 
           <div className="space-y-4">
@@ -385,6 +402,19 @@ export const DashboardPage: React.FC = () => {
               </div>
             </Link>
           </div>
+        </div>
+
+        {/* Credit Check Section */}
+        <div className="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+          <div className="mb-8">
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">
+              Credit Bureau Check
+            </h3>
+            <p className="text-gray-600 text-lg">
+              Check your credit score and get financial insights
+            </p>
+          </div>
+          <CreditCheck />
         </div>
       </div>
     </div>

@@ -10,6 +10,7 @@ import { InsightsModule } from "./insights/insights.module";
 import { BureauModule } from "./bureau/bureau.module";
 import { HealthModule } from "./health/health.module";
 import { AuditModule } from "./audit/audit.module";
+import { DatabaseSeederModule } from "./database/database-seeder.module";
 import { DatabaseConfig } from "./config/database.config";
 
 @Module({
@@ -34,6 +35,7 @@ import { DatabaseConfig } from "./config/database.config";
     BureauModule,
     HealthModule,
     AuditModule,
+    DatabaseSeederModule,
   ],
   providers: [
     {

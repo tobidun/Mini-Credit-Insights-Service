@@ -1,6 +1,21 @@
-version: "3.8"
+# Docker Compose configuration for Credit Insights Service
 
 services:
+  mysql:
+    image: mysql:8.0
+    container_name: credit-insights-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: credit_insights
+      MYSQL_USER: credit_user
+      MYSQL_PASSWORD: credit_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - credit-insights-network
+
   backend:
     build: .
     container_name: credit-insights-backend
@@ -8,18 +23,21 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=development
-      - DB_TYPE=sqlite
-      - DB_DATABASE=./data/credit_insights.db
-      - JWT_SECRET=your-super-secret-jwt-key-change-in-production
-      - BUREAU_API_URL=http://bureau-mock:3001/v1/credit/check
-      - BUREAU_API_KEY=mock-api-key-123
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USERNAME=credit_user
+      - DB_PASSWORD=credit_password
+      - DB_DATABASE=credit_insights
+      - JWT_SECRET=secret-jwt-key-change-in-production
+      - BUREAU_API_URL=http://bureau-mock:4000/v1/credit/check
+      - BUREAU_API_KEY=test-api-key
       - BUREAU_MAX_RETRIES=3
       - BUREAU_TIMEOUT=10000
     depends_on:
+      - mysql
       - bureau-mock
     volumes:
       - ./uploads:/app/uploads
-      - ./data:/app/data
     networks:
       - credit-insights-network
 
@@ -27,10 +45,10 @@ services:
     build: ./bureau-mock
     container_name: credit-insights-bureau-mock
     ports:
-      - "3001:3001"
+      - "4000:4000"
     environment:
-      - PORT=3001
-      - API_KEY=mock-api-key-123
+      - PORT=4000
+      - API_KEY=test-api-key
     networks:
       - credit-insights-network
 
@@ -49,3 +67,6 @@ services:
 networks:
   credit-insights-network:
     driver: bridge
+
+volumes:
+  mysql_data:

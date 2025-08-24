@@ -247,23 +247,6 @@ export const LoginPage: React.FC = () => {
             </Link>
           </div>
         </div>
-
-        {/* Demo Credentials */}
-        <div className="card bg-blue-50 border-blue-200">
-          <div className="text-center">
-            <h4 className="text-sm font-semibold text-blue-900 mb-2">
-              Demo Credentials
-            </h4>
-            <div className="text-xs text-blue-700 space-y-1">
-              <p>
-                <strong>Admin:</strong> admin / admin123
-              </p>
-              <p>
-                <strong>User:</strong> user / user123
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

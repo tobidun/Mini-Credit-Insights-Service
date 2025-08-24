@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -22,7 +22,10 @@ import {
   CurrencyDollarIcon,
   ClockIcon,
   SparklesIcon,
+  UserIcon,
 } from "@heroicons/react/24/outline";
+import { useCurrentUser } from "../hooks/useAuth";
+import { apiService } from "../services/api";
 
 ChartJS.register(
   ArcElement,
@@ -39,7 +42,32 @@ ChartJS.register(
 export const InsightsPage: React.FC = () => {
   const { data: insights, isLoading } = useInsights();
   const computeInsights = useComputeInsights();
+  const { data: user } = useCurrentUser();
   const [selectedInsight, setSelectedInsight] = useState<number>(0);
+  const [adminInsights, setAdminInsights] = useState<any[]>([]);
+  const [isAdminLoading, setIsAdminLoading] = useState(false);
+
+  // Fetch all users' insights if admin
+  useEffect(() => {
+    if (user?.role === "admin") {
+      setIsAdminLoading(true);
+      apiService
+        .getAllUsersInsights()
+        .then((data) => {
+          setAdminInsights(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching admin insights:", error);
+        })
+        .finally(() => {
+          setIsAdminLoading(false);
+        });
+    }
+  }, [user]);
+
+  // Use admin insights if user is admin, otherwise use regular insights
+  const displayInsights = user?.role === "admin" ? adminInsights : insights;
+  const displayLoading = user?.role === "admin" ? isAdminLoading : isLoading;
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-US", {
@@ -141,10 +169,14 @@ export const InsightsPage: React.FC = () => {
           <div className="text-center">
             <div className="loading-spinner h-16 w-16 mx-auto mb-6"></div>
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              Loading your insights...
+              {user?.role === "admin"
+                ? "Loading all users' insights..."
+                : "Loading your insights..."}
             </h3>
             <p className="text-gray-600">
-              Please wait while we analyze your financial data
+              {user?.role === "admin"
+                ? "Please wait while we gather insights from all users"
+                : "Please wait while we analyze your financial data"}
             </p>
           </div>
         </div>
@@ -212,7 +244,7 @@ export const InsightsPage: React.FC = () => {
     );
   }
 
-  const currentInsight = insights[selectedInsight];
+  const currentInsight = displayInsights?.[selectedInsight];
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
@@ -223,13 +255,22 @@ export const InsightsPage: React.FC = () => {
             <ChartBarIcon className="h-6 w-6 text-white" />
           </div>
           <h1 className="text-4xl font-bold text-gray-900">
-            Financial Insights
+            {user?.role === "admin"
+              ? "All Users Financial Insights"
+              : "Financial Insights"}
           </h1>
         </div>
         <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-          Analyze your spending patterns and financial health with comprehensive
-          insights
+          {user?.role === "admin"
+            ? "View and analyze all users' financial insights and spending patterns"
+            : "Analyze your spending patterns and financial health with comprehensive insights"}
         </p>
+        {user?.role === "admin" && (
+          <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-purple-100 text-purple-800 rounded-full text-sm font-medium">
+            <UserIcon className="h-4 w-4" />
+            Admin View - Showing all users' insights
+          </div>
+        )}
       </div>
 
       {/* Insights Selection */}
@@ -239,7 +280,7 @@ export const InsightsPage: React.FC = () => {
             Select Statement
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {insights.map((insight, index) => (
+            {displayInsights?.map((insight, index) => (
               <button
                 key={insight.id}
                 onClick={() => setSelectedInsight(index)}
@@ -249,6 +290,16 @@ export const InsightsPage: React.FC = () => {
                     : "border-gray-200 hover:border-purple-300 hover:bg-purple-50/50"
                 }`}
               >
+                {user?.role === "admin" && (
+                  <div className="mb-3 p-2 bg-purple-50 rounded-lg border border-purple-200">
+                    <div className="flex items-center">
+                      <UserIcon className="h-3 w-3 text-purple-600 mr-2" />
+                      <span className="text-xs font-medium text-purple-800">
+                        {insight.user?.username || "Unknown"}
+                      </span>
+                    </div>
+                  </div>
+                )}
                 <div className="flex items-center justify-between mb-2">
                   <span className="font-semibold text-gray-900">
                     Statement #{insight.statementId}

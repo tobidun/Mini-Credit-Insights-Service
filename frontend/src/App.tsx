@@ -13,8 +13,9 @@ import { DashboardPage } from "./pages/DashboardPage";
 import { StatementsPage } from "./pages/StatementsPage";
 import { InsightsPage } from "./pages/InsightsPage";
 import { BureauPage } from "./pages/BureauPage";
+import AdminPage from "./pages/AdminPage";
 import { ProtectedRoute } from "./components/ProtectedRoute";
-import { Layout } from "./components/Layout";
+import Layout from "./components/Layout";
 import "./index.css";
 
 const queryClient = new QueryClient({
@@ -71,6 +72,16 @@ function App() {
                 <ProtectedRoute>
                   <Layout>
                     <BureauPage />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <AdminPage />
                   </Layout>
                 </ProtectedRoute>
               }

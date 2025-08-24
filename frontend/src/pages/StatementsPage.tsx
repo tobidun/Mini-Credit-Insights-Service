@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { Link } from "react-router-dom";
 import {
@@ -11,13 +11,42 @@ import {
   TrashIcon,
   FolderOpenIcon,
   DocumentArrowUpIcon,
+  UserIcon,
 } from "@heroicons/react/24/outline";
 import { useStatements, useUploadStatement } from "../hooks/useStatements";
+import { useCurrentUser } from "../hooks/useAuth";
+import { apiService } from "../services/api";
 
 export const StatementsPage: React.FC = () => {
   const { data: statements, isLoading } = useStatements();
   const uploadStatement = useUploadStatement();
+  const { data: user } = useCurrentUser();
   const [draggedFile, setDraggedFile] = useState<File | null>(null);
+  const [adminStatements, setAdminStatements] = useState<any[]>([]);
+  const [isAdminLoading, setIsAdminLoading] = useState(false);
+
+  // Fetch all users' statements if admin
+  useEffect(() => {
+    if (user?.role === "admin") {
+      setIsAdminLoading(true);
+      apiService
+        .getAllUsersStatements()
+        .then((data) => {
+          setAdminStatements(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching admin statements:", error);
+        })
+        .finally(() => {
+          setIsAdminLoading(false);
+        });
+    }
+  }, [user]);
+
+  // Use admin statements if user is admin, otherwise use regular statements
+  const displayStatements =
+    user?.role === "admin" ? adminStatements : statements;
+  const displayLoading = user?.role === "admin" ? isAdminLoading : isLoading;
 
   const onDrop = (acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
@@ -87,12 +116,23 @@ export const StatementsPage: React.FC = () => {
           <div className="h-12 w-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center mr-4">
             <DocumentTextIcon className="h-6 w-6 text-white" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-900">Bank Statements</h1>
+          <h1 className="text-4xl font-bold text-gray-900">
+            {user?.role === "admin"
+              ? "All Users Bank Statements"
+              : "Bank Statements"}
+          </h1>
         </div>
         <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-          Upload and manage your bank statements to generate comprehensive
-          financial insights and track your spending patterns
+          {user?.role === "admin"
+            ? "View and manage all users' bank statements and financial data"
+            : "Upload and manage your bank statements to generate comprehensive financial insights and track your spending patterns"}
         </p>
+        {user?.role === "admin" && (
+          <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-purple-100 text-purple-800 rounded-full text-sm font-medium">
+            <UserIcon className="h-4 w-4" />
+            Admin View - Showing all users' data
+          </div>
+        )}
       </div>
 
       {/* Upload Section */}
@@ -309,6 +349,11 @@ export const StatementsPage: React.FC = () => {
                 <table className="min-w-full">
                   <thead>
                     <tr className="border-b border-gray-200 bg-gray-100">
+                      {user?.role === "admin" && (
+                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                          User
+                        </th>
+                      )}
                       <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                         File Details
                       </th>
@@ -330,11 +375,28 @@ export const StatementsPage: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-white">
-                    {statements.map((statement) => (
+                    {displayStatements?.map((statement) => (
                       <tr
                         key={statement.id}
                         className="hover:bg-blue-50/50 transition-colors"
                       >
+                        {user?.role === "admin" && (
+                          <td className="px-6 py-4">
+                            <div className="flex items-center">
+                              <div className="h-8 w-8 bg-purple-100 rounded-lg flex items-center justify-center mr-3">
+                                <UserIcon className="h-4 w-4 text-purple-600" />
+                              </div>
+                              <div>
+                                <div className="text-sm font-semibold text-gray-900">
+                                  {statement.user?.username || "Unknown"}
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                  {statement.user?.email || "No email"}
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                        )}
                         <td className="px-6 py-4">
                           <div className="flex items-center">
                             <div className="h-10 w-10 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
@@ -421,11 +483,22 @@ export const StatementsPage: React.FC = () => {
 
               {/* Mobile Card View */}
               <div className="lg:hidden space-y-4">
-                {statements.map((statement) => (
+                {displayStatements?.map((statement) => (
                   <div
                     key={statement.id}
                     className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm"
                   >
+                    {user?.role === "admin" && (
+                      <div className="mb-4 p-3 bg-purple-50 rounded-lg border border-purple-200">
+                        <div className="flex items-center">
+                          <UserIcon className="h-4 w-4 text-purple-600 mr-2" />
+                          <span className="text-sm font-medium text-purple-800">
+                            {statement.user?.username || "Unknown"} (
+                            {statement.user?.email || "No email"})
+                          </span>
+                        </div>
+                      </div>
+                    )}
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center">
                         <div className="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">

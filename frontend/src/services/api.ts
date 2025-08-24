@@ -126,6 +126,45 @@ class ApiService {
     const response = await this.api.get("/health/metrics");
     return response.data;
   }
+
+  // Admin endpoints - Get all users' data
+  async getAllUsersStatements(): Promise<any[]> {
+    const response = await this.api.get("/admin/statements");
+    return response.data;
+  }
+
+  async getAllUsersInsights(): Promise<any[]> {
+    const response = await this.api.get("/admin/insights");
+    return response.data;
+  }
+
+  async getAllUsersBureauReports(): Promise<any[]> {
+    const response = await this.api.get("/admin/bureau/reports");
+    return response.data;
+  }
+
+  async getUserStatements(userId: number): Promise<any[]> {
+    const response = await this.api.get(`/admin/users/${userId}/statements`);
+    return response.data;
+  }
+
+  async getUserInsights(userId: number): Promise<any[]> {
+    const response = await this.api.get(`/admin/users/${userId}/insights`);
+    return response.data;
+  }
+
+  async getUserBureauReports(userId: number): Promise<any[]> {
+    const response = await this.api.get(
+      `/admin/users/${userId}/bureau/reports`
+    );
+    return response.data;
+  }
+
+  // Admin dashboard statistics
+  async getAdminDashboardStats(): Promise<any> {
+    const response = await this.api.get("/admin/dashboard/stats");
+    return response.data;
+  }
 }
 
 export const apiService = new ApiService();
