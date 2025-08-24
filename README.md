@@ -271,17 +271,6 @@ npm test -- --testPathPattern=auth
 - **Demo-only interfaces** - never collects real personal data
 - **Secure error handling** - no information leakage
 
-## 🚀 Deployment
-
-### **Production Checklist**
-
-- [ ] Change default admin credentials
-- [ ] Use strong, unique JWT secrets
-- [ ] Enable HTTPS with proper certificates
-- [ ] Set up database backups
-- [ ] Configure monitoring and alerting
-- [ ] Set appropriate rate limits
-
 ### **Docker Deployment**
 
 ```bash
@@ -294,23 +283,5 @@ docker-compose logs -f
 # Stop services
 docker-compose down
 ```
-
-## 🤝 Contributing
-
-This project was built as a technical assessment, but if you want to contribute:
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Submit a pull request
-
-## 📄 License
-
-This project is for demonstration purposes. Feel free to use it as a reference for your own projects.
-
----
-
-**Built with ❤️ using modern web technologies. Perfect for learning NestJS, React, and financial application development.**
 
 GitHub: [Mini-Credit-Insights-Service](https://github.com/tobidun/Mini-Credit-Insights-Service)
